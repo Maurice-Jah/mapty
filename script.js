@@ -11,15 +11,60 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
-// use the geolocation map
-let map, mapEvent;
+// Creating the Workout
+class Workout {
+  date = new Date();
 
+  id = (Date.now() + '').slice(-10);
+
+  constructor(coords, distance, duration) {
+    this.coords = coords;
+    this.distance = distance;
+    this.duration = duration;
+  }
+}
+
+class Running extends Workout {
+  constructor(coords, distance, duration, cadence) {
+    super(coords, distance, duration);
+    this.cadence = cadence;
+    this.calcPace();
+  }
+
+  calcPace() {
+    // min/km
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+
+class Cycling extends Workout {
+  constructor(coords, distance, duration, elevationGain) {
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+  }
+
+  calcSpeed() {
+    // km/h
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
+
+const running1 = new Running([6, 3], 50, 10, 30);
+const cycling1 = new Cycling([6, 3], 50, 95, 523);
+
+console.log(running1, cycling1);
+
+/////////////////////////////////////////////////
+// APPLICATION ARCHITECTURE
 class App {
   // object properties--- private instance properties
   #map;
   #mapEvent;
 
   constructor() {
+    // use the geolocation map
     this._getPosition();
 
     // Form
