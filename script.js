@@ -24,7 +24,7 @@ class Workout {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.description = `${this.type[0].toUpperCase() + this.type.slice(1)} on ${
       months[this.date.getMonth()]
-    }`;
+    } ${this.date.getDate()}`;
   }
 }
 
@@ -114,6 +114,20 @@ class App {
     inputDistance.focus();
   }
 
+  // To hide the form
+  _hideForm() {
+    // Empty the fields
+    inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+      inputDistance.value =
+        '';
+
+    form.style.display = 'none';
+    form.classList.add('hidden');
+    setTimeout(() => (form.style.display = 'grid'), 1000);
+  }
+
   _toggleElevationField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
@@ -166,11 +180,7 @@ class App {
     this._renderWorkout(workout);
 
     // Hide form + Clear inputs
-    inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-      inputDistance.value =
-        '';
+    this._hideForm();
   }
 
   _renderWorkoutMarker(workout) {
