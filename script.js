@@ -185,6 +185,9 @@ class App {
 
     // Hide form + Clear inputs
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -274,6 +277,16 @@ class App {
       },
     });
   }
+
+  _setLocalStorage() {
+    const storage = localStorage.setItem(
+      'workouts',
+      JSON.stringify(this.#workouts)
+    );
+    console.log(storage);
+  }
+
+  _getLocalStorage() {}
 }
 
 const app = new App();
