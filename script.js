@@ -73,6 +73,9 @@ class App {
     // use the geolocation map
     this._getPosition();
 
+    // Get the local Storage
+    this._getLocalStorage();
+
     // Form
     form.addEventListener('submit', this._newWorkout.bind(this));
 
@@ -97,8 +100,6 @@ class App {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
 
-    console.log(`https://www.google.ng/maps/@${latitude},${longitude}`);
-
     const coords = [latitude, longitude];
 
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
@@ -110,6 +111,11 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    // load the marker from local storage
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -279,14 +285,20 @@ class App {
   }
 
   _setLocalStorage() {
-    const storage = localStorage.setItem(
-      'workouts',
-      JSON.stringify(this.#workouts)
-    );
-    console.log(storage);
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
-  _getLocalStorage() {}
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+
+    if (!data) return;
+
+    this.#workouts = data;
+
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
 }
 
 const app = new App();
